@@ -1,0 +1,593 @@
+/* =========================
+   AUTHENTICATION
+========================= */
+
+.auth-page {
+    min-height: calc(100vh - 76px);
+
+    display: grid;
+    place-items: center;
+
+    padding: 50px 20px;
+}
+
+
+.auth-card {
+    width: min(450px, 100%);
+
+    padding: 34px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.auth-brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 28px;
+}
+
+
+.auth-brand-mark {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background: var(--primary);
+
+    color: #fff;
+
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.auth-brand strong {
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+.auth-brand strong span {
+    color: var(--primary);
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.auth-card h2 {
+    margin-top: 8px;
+
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    font-size: 28px;
+
+    letter-spacing: -1px;
+}
+
+
+.auth-subtitle {
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.auth-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    margin-top: 25px;
+}
+
+
+.auth-field {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.auth-field label {
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.auth-field input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    background: var(--surface-soft);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition: 0.2s ease;
+}
+
+
+.auth-field input::placeholder {
+    color: var(--muted);
+}
+
+
+.auth-field input:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px var(--primary-light);
+}
+
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.auth-submit {
+    width: 100%;
+
+    margin-top: 4px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: var(--primary);
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.auth-submit:hover {
+    background: var(--primary-dark);
+
+    transform: translateY(-1px);
+}
+
+
+.auth-submit:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.auth-message {
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 11px 13px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.auth-message.show {
+    display: block;
+}
+
+
+.auth-message.error {
+    background: var(--red);
+
+    color: #fff;
+}
+
+
+.auth-message.success {
+    background: var(--green-light);
+
+    color: var(--green);
+}
+
+
+/* =========================
+   LOGIN / REGISTER SWITCH
+========================= */
+
+.auth-switch {
+    margin-top: 20px;
+
+    color: var(--muted);
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+
+.auth-switch a {
+    color: var(--primary);
+
+    font-weight: 700;
+}
+
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+
+/* ==================================================
+   DELETE ACCOUNT SECTION
+================================================== */
+
+.account-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 35px;
+
+    padding: 20px 22px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    background: var(--surface);
+}
+
+
+.account-actions h3 {
+    margin-top: 5px;
+
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    font-size: 17px;
+}
+
+
+.account-actions p:not(.section-label) {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+.danger-btn {
+    flex-shrink: 0;
+
+    padding: 11px 16px;
+
+    border: 1px solid var(--red);
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: var(--red);
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.danger-btn:hover {
+    background: var(--red);
+
+    color: #fff;
+}
+
+
+/* ==================================================
+   DELETE ACCOUNT POPUP
+================================================== */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.48);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: 0.2s ease;
+}
+
+
+.modal-overlay.show {
+    opacity: 1;
+
+    visibility: visible;
+}
+
+
+.delete-modal {
+    position: relative;
+
+    width: min(430px, 100%);
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    background: var(--surface);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.20);
+
+    transform: translateY(12px) scale(0.98);
+
+    transition: 0.2s ease;
+}
+
+
+.modal-overlay.show .delete-modal {
+    transform: translateY(0) scale(1);
+}
+
+
+/* close button */
+
+.modal-close {
+    position: absolute;
+
+    top: 14px;
+
+    right: 15px;
+
+    width: 32px;
+
+    height: 32px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: var(--surface-soft);
+
+    color: var(--muted);
+
+    font-size: 21px;
+
+    cursor: pointer;
+}
+
+
+.modal-close:hover {
+    color: var(--text);
+}
+
+
+/* warning icon */
+
+.delete-icon {
+    width: 52px;
+
+    height: 52px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 15px;
+
+    background: rgba(229, 82, 82, 0.12);
+
+    color: var(--red);
+
+    font-size: 23px;
+}
+
+
+.delete-modal h2 {
+    margin-top: 8px;
+
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+    font-size: 24px;
+}
+
+
+.delete-modal > p:not(.section-label) {
+    margin-top: 10px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+
+/* popup buttons */
+
+.modal-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+
+.cancel-btn,
+.confirm-delete-btn {
+    padding: 11px 15px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.cancel-btn {
+    border: 1px solid var(--border);
+
+    background: var(--surface-soft);
+
+    color: var(--text);
+}
+
+
+.cancel-btn:hover {
+    background: var(--border);
+}
+
+
+.confirm-delete-btn {
+    border: none;
+
+    background: var(--red);
+
+    color: #fff;
+}
+
+
+.confirm-delete-btn:hover {
+    opacity: 0.9;
+}
+
+
+.confirm-delete-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .auth-card {
+        padding: 26px 21px;
+    }
+
+
+    .account-actions {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .danger-btn {
+        width: 100%;
+    }
+
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    .cancel-btn,
+    .confirm-delete-btn {
+        width: 100%;
+    }
+
+}

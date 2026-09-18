@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block heading %}{% endblock heading %}- sTodo</title>
+    {% block styleFile %}{% endblock styleFile %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/CSS/base.css">
+
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span>ST</span>
+            <h1>Student<span>Todo</span></h1>
+        </div>
+
+        <div class="nav-right">
+            {% block rightSideBlock %}
+                
+            {% endblock rightSideBlock %}
+        </div>
+    </header>
+
+    {% block body %}
+        
+    {% endblock body %}
+    <footer>
+        <p>Student Task Manager <span>•</span> Stay focused. Stay productive.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    {% block javaScript %}{% endblock javaScript %}
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block heading %}Register{% endblock heading %}
+
+{% block styleFile %}
+<link rel="stylesheet" href="../static/CSS/auth.css">
+{% endblock styleFile %}
+
+{% block body %}
+
+<main class="auth-page">
+
+    <section class="auth-card">
+
+
+        <p class="section-label">
+            GET STARTED
+        </p>
+
+        <h2>
+            Create your account
+        </h2>
+
+        <p class="auth-subtitle">
+            Create an account to manage your tasks and workspace.
+        </p>
+
+
+        <div id="authMessage" class="auth-message"></div>
+
+
+        <form id="registerForm" class="auth-form">
+
+
+            <div class="auth-field">
+
+                <label for="name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Your name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Repeat your password"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-submit"
+                id="registerBtn"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <p class="auth-switch">
+
+            Already have an account?
+
+            <a href="/auth/login">
+                Sign in
+            </a>
+
+        </p>
+
+    </section>
+
+</main>
+
+{% endblock body %}
+
+{% block javaScript %}
+    <script type="module" src="../static/JS/singup.js"></script>
+{% endblock javaScript %}

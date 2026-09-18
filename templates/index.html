@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block heading %} Home {% endblock heading %}
+{% block styleFile %}
+    <link rel="stylesheet" href="../static/CSS/style.css">
+{% endblock styleFile %}
+
+{% block rightSideBlock %}
+    <div id="buttons">
+        <button type="button" class="btn btn-outline-danger typ2" id="deleteAccount">Delete</button>
+        <button type="button" class="btn btn-outline-warning typ2" id="logotAccount">LogOut</button>
+
+        <button type="button" class="btn btn-outline-primary typ1" id="singupAccount">SingUp</button>
+        <button type="button" class="btn btn-outline-info typ1" id="loginAccount">LogIn</button>
+    </div>
+    <div class="profile">
+        <div class="avatar">
+            {% if sName %}
+                {{ sName[0]|upper }}
+            {% else %}
+                G
+            {% endif %}
+        </div>
+        <div>
+            <strong>{{ sName|default("Guest", true) }}</strong>
+            <small>{{ Email|default("Guest", true) }}</small>
+        </div>
+    </div>
+{% endblock rightSideBlock %}
+{% block body %}
+
+    <main class="container">
+
+        <section class="hero">
+            <div>
+                <p class="welcome">WELCOME BACK 👋</p>
+                <h2>Manage your tasks,<br><span>stay productive.</span></h2>
+                <p class="hero-text">
+                    Keep track of your assignments, projects and daily tasks in one place.
+                </p>
+            </div>
+
+            <button class="add-btn addBtns" id="addBtn">
+                <span>+</span>
+                Add New Task
+            </button>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon total">📋</div>
+                <div>
+                    <p>Total Tasks</p>
+                    <h3>{{ tasks|length }}</h3>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon pending">⏳</div>
+                <div>
+                    <p>Pending</p>
+                    <h3>{{ tasks|selectattr('completed', 'equalto', 0)|list|length }}</h3>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon completed">✓</div>
+                <div>
+                    <p>Completed</p>
+                    <h3>{{ tasks|selectattr('completed', 'equalto', 1)|list|length }}</h3>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="tasks-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="section-label">YOUR WORKSPACE</p>
+                    <h2>My Tasks</h2>
+                </div>
+
+                <div class="task-filter">
+                    <button class="active">All</button>
+                    <button>Pending</button>
+                    <button>Completed</button>
+                </div>
+            </div>
+
+            <div class="task-list">
+
+                {% if tasks %}
+
+                    {% for task in tasks %}
+
+                    <article class="task-card {% if task.completed %}done{% endif %}">
+
+                        <div class="task-check">
+                            {% if task.completed %}
+                                <span>✓</span>
+                            {% else %}
+                                <span></span>
+                            {% endif %}
+                        </div>
+
+                        <div class="task-info">
+                            <h3>{{ task.title }}</h3>
+
+                            {% if task.description %}
+                            <p>{{ task.description }}</p>
+                            {% endif %}
+
+                            {% if task.due_date %}
+                            <div class="due-date">
+                                📅 Due {{ task.due_date }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="task-status">
+                            {% if task.completed %}
+                                <span class="badge completed-badge">Completed</span>
+                            {% else %}
+                                <span class="badge pending-badge">Pending</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="task-actions">
+                            <button>Edit</button>
+                            <button class="delete">Delete</button>
+                        </div>
+
+                    </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <h3>No tasks yet</h3>
+                        <p>Create your first task and start getting things done.</p>
+                        <button class="add-btn addBtns">Add Your First Task</button>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+    <!-- Delete Account Popup -->
+
+    <div
+        class="modal-overlay"
+        id="deleteModal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="delete-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="deleteModalTitle"
+        >
+
+            <button
+                class="modal-close"
+                id="closeDeleteModal"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div class="delete-icon">
+                ⚠
+            </div>
+
+
+            <p class="section-label">
+                DANGER ZONE
+            </p>
+
+
+            <h2 id="deleteModalTitle">
+                Delete your account?
+            </h2>
+
+
+            <p>
+                This action cannot be undone.
+                Your account and associated data will be permanently deleted.
+            </p>
+
+
+            <div class="modal-actions">
+
+                <button
+                    class="cancel-btn"
+                    id="cancelDelete"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="confirm-delete-btn"
+                    id="confirmDelete"
+                    type="button"
+                >
+                    Yes, Delete Account
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="delete-modal" id="deleteModal">
+
+        <div class="delete-modal-content">
+
+            <button class="delete-modal-close" id="closeDeleteModal">
+                ×
+            </button>
+
+            <div class="delete-warning-icon">
+                ⚠
+            </div>
+
+            <h2>Delete Account?</h2>
+
+            <p>
+                Are you sure you want to delete your account?
+                This action cannot be undone and all your data will be permanently removed.
+            </p>
+
+            <div class="delete-modal-actions">
+                <button class="cancel-btn" id="cancelDelete">
+                    Cancel
+                </button>
+
+                <button class="confirm-delete-btn" id="confirmDelete">
+                    Yes, Delete Account
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="desc" class="form-label">Desciription</label>
+                <input type="text" class="form-control" id="desc" required>
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeForm">Close</button>
+        <button type="button" class="btn btn-primary" id="submitForm">Save</button>
+        </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock body %} 
+{% block javaScript %}
+    <script type="module" src="../static/JS/index.js"></script>
+{% endblock javaScript %}

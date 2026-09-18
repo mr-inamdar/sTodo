@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block heading %}Login{% endblock heading %}
+
+{% block styleFile %}
+<link rel="stylesheet" href="../static/CSS/auth.css">
+{% endblock styleFile %}
+
+{% block body %}
+
+<main class="auth-page">
+
+    <section class="auth-card">
+
+        <p class="section-label">WELCOME BACK</p>
+
+        <h2>Sign in to your account</h2>
+
+        <p class="auth-subtitle">
+            Enter your credentials to continue to your workspace.
+        </p>
+
+        <div id="authMessage" class="auth-message"></div>
+
+        <form id="loginForm" class="auth-form">
+
+            <div class="auth-field">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-submit"
+                id="loginBtn"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="/auth/register">
+                Create one
+            </a>
+        </p>
+
+    </section>
+
+</main>
+
+{% endblock body %}
+
+{% block javaScript %}
+    <script type="module" src="../static/JS/login.js"></script>
+{% endblock javaScript %}
