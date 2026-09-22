@@ -4,7 +4,7 @@ def insertMyTodo(id, title, desc):
     db = get_sql_connection()
     cursor = db.cursor()
 
-    query = 'INSERT INTO todos(title, description) VALUES(%s, %s) WHERE id = %s'
+    query = 'INSERT INTO todos(title, description, id) VALUES(%s, %s, %s)'
 
     cursor.execute(query, (title, desc, id))
 
@@ -19,7 +19,7 @@ def getMyTodos(id):
     db = get_sql_connection()
     cursor = db.cursor(dictionary=True)
 
-    query = 'SELECT title, description, due_date, completed FROM todos WHERE id = %s'
+    query = 'SELECT title, description, due_date,todoId AS id, completed FROM todos WHERE id = %s'
 
     cursor.execute(query, (id,))
     todos =cursor.fetchall()

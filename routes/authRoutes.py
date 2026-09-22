@@ -7,40 +7,6 @@ from modules.User import (
     delete_user
 )
 
-
-# def register():
-#     data = request.get_json(silent=True)
-#     if not data:
-#         if request.form:
-#             data = request.form
-#         else:
-#             return jsonify({
-#                 "success": False,
-#                 "message": "Invalid JSON or form data"
-#             }), 400
-
-#     name = data.get("name")
-#     email = data.get("email")
-#     password = data.get("password")
-
-#     if not name or not email or not password:
-#         return jsonify({
-#             "success": False,
-#             "message": "Name, email and password are required"
-#         }), 400
-
-#     if find_by_email(email):
-#         return jsonify({
-#             "success": False,
-#             "message": "Email already exists"
-#         }), 409
-
-#     user_id = create_user(name, email, password)
-#     return jsonify({
-#         "success": True,
-#         "message": "Account created successfully",
-#         "user_id": user_id
-#     }), 201
 def register():
     print("REGISTER ROUTE HIT")
 
@@ -116,7 +82,7 @@ def login():
             "success": False,
             "message": "Invalid email or password"
         }), 401
-
+    
     if not verify_password(user["password"], password):
         return jsonify({
             "success": False,
@@ -125,6 +91,9 @@ def login():
 
     session.clear()
     session["user_id"] = user["sId"]
+    session['sName'] = user['sName']
+    session['email'] = user['email']
+    
     return jsonify({
         "success": True,
         "message": "Login successful",

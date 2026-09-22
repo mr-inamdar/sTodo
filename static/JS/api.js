@@ -38,8 +38,8 @@ export async function singUp(data) {
     return response.json();
 }
 
-export async function deleteAccaount() {
-    const response = await fetch("/auth/deleteAcc", {
+export async function deleteAccaount(id) {
+    const response = await fetch(`/auth/deleteAcc/${id}`, {
         method: "DELETE"
     });
 
@@ -52,8 +52,14 @@ export async function logOutAccount() {
     })
 }
 
+export async function getAllTodos(id) {
+    await fetch(`/${id}`, {
+        method: "GET"
+    });
+}
+
 export async function insertToso(data, uId) {
-    const response = await fetch(`addTodo/${uId}`, {
+    const response = await fetch(`addTask/${uId}`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
@@ -63,15 +69,15 @@ export async function insertToso(data, uId) {
 
     return response.json();
 }
-export async function deleteToso(uId, todoId) {
-    const response = await fetch(`deleteTodo/${uId}/${todoId}`, {
+export async function deleteTodo(uId, todoId) {
+    const response = await fetch(`deleteTask/${uId}/${todoId}`, {
         method: 'DELETE'
     })
 
     return response.json();
 }
-export async function updateToso(data, uId, todoId) {
-    const response = await fetch(`updateTodo/${uId}/${todoId}`, {
+export async function updateTodo(data, uId, todoId) {
+    const response = await fetch(`updateTask/${uId}/${todoId}`, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json"
@@ -80,4 +86,20 @@ export async function updateToso(data, uId, todoId) {
     })
 
     return response.json();
+}
+
+export async function syncSession() {
+    try {
+        const res = await fetch('/auth/sessionStatus');
+
+        const data = await res.json();
+
+        if (!data.loggedIn) {
+            localStorage.removeItem('user');
+            window.location.href = "/login";
+        }
+
+    } catch (error) {
+        console.error("Session check failed:", error);
+    }
 }

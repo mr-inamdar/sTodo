@@ -42,12 +42,13 @@ def fetch_all_todos(user_id):
         }), 404
 
     todos = getMyTodos(user_id)
-
+    
     return jsonify({
         "success": True,
         "message": "Todos fetched successfully",
         "allTodos": todos
     }), 200
+
 
 def update_todo(user_id, todo_id):
     data = request.get_json()
@@ -77,7 +78,15 @@ def update_todo(user_id, todo_id):
     }), 200
 
 
-def delete_todo(todo_id):
+def delete_todo(user_id, todo_id):
+    user = find_by_id(user_id)
+
+    if not user:
+        return jsonify({
+            "success": False,
+            "message": "User does not exist"
+        }), 404
+    
     deleteMyTodo(todo_id)
 
     return jsonify({

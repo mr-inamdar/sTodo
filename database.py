@@ -2,10 +2,10 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 def get_sql_connection():
-    print("🔥 get_sql_connection START")
+    print("get_sql_connection START")
 
     host = os.getenv("HOST")
     user = os.getenv("USER")
@@ -18,22 +18,23 @@ def get_sql_connection():
     print("PASSWORD EXISTS:", password is not None)
 
     try:
-        print("🔥 BEFORE CONNECT")
+        print("BEFORE CONNECT")
 
         db = mysql.connector.connect(
             host=host,
             user=user,
             password=password,
-            database=database
+            database=database,
+            use_pure=True
         )
 
-        print("🔥 AFTER CONNECT")
-        print("🔥 DATABASE CONNECTED")
+        print("AFTER CONNECT")
+        print("DATABASE CONNECTED")
 
         return db
 
     except Exception as e:
-        print("❌ DATABASE ERROR:")
+        print("DATABASE ERROR:")
         print(type(e).__name__)
         print(str(e))
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from dotenv import load_dotenv
 import os
 
@@ -13,8 +13,7 @@ from routes.todoRoutes import fetch_all_todos, insert_todo, update_todo, delete_
 
 from middleware.auth import user_required
 
-
-load_dotenv()
+load_dotenv(override=True)
 
 app = Flask(__name__)
 
@@ -27,7 +26,25 @@ app.config["SESSION_COOKIE_SECURE"] = False
 
 @app.route('/')
 def renderPage():
-    return render_template('index.html')
+
+    user = None
+    tasks = []
+
+    if session.get("user_id"):
+        user = {
+            "sName": session.get("sName"),
+            "email": session.get("email")
+        }
+
+        res = fetch_all_todos(session["user_id"])
+        response = res[0].get_json()
+        tasks = response.get("allTodos", [])
+
+    return render_template(
+        'index.html',
+        user=user,
+        tasks=tasks
+    )
 
 @app.route('/register')
 def renderSinUpPage():
@@ -40,12 +57,24 @@ def renderlogInPage():
 @app.route('/<int:id>', methods=['GET'])
 @user_required
 def homePage(id):
-    if request.method == 'GET':
-        responce = fetch_all_todos(id)
 
-        if responce.success:
-            return render_template('index.html', tasks=responce['allTodos'])
+    res = fetch_all_todos(id)
 
+    user = {
+        "sName": session.get("sName"),
+        "email": session.get("email")
+    }
+
+    response = res[0].get_json()
+
+    print("USER FOR JINJA:", user)
+
+    if user:
+        return render_template(
+            'index.html',
+            user=user,
+            tasks=response['allTodos']
+        )
     
 
 @app.route('/addTask/<int:uid>', methods=['POST'])
@@ -60,11 +89,11 @@ def updateTask(uid, todoId):
     if request.method == 'PUT':
         return update_todo(user_id=uid, todo_id=todoId)
 
-@app.route('/deleteTask/<int:todoId>', methods=['DELETE'])
+@app.route('/deleteTask/<int:uId>/<int:todoId>', methods=['DELETE'])
 @user_required
-def deleteTask(todoId):
+def deleteTask(uId, todoId):
     if request.method == 'DELETE':
-        return delete_todo(todo_id=todoId)
+        return delete_todo(user_id=uId, todo_id=todoId)
 
 
 @app.route('/auth/register', methods=['POST'])
@@ -90,6 +119,17 @@ def logout_user():
 def delete_user():
     if request.method == 'DELETE':
         return delete_account()
+
+@app.route('/auth/sessionStatus')
+def session_status():
+    if session.get('user_id'):
+        return jsonify({
+            "loggedIn": True
+        })
+
+    return jsonify({
+        "loggedIn": False
+    }), 401
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))

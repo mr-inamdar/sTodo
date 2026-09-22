@@ -6,25 +6,42 @@
 
 {% block rightSideBlock %}
     <div id="buttons">
-        <button type="button" class="btn btn-outline-danger typ2" id="deleteAccount">Delete</button>
+        <button type="button" class="btn btn-outline-danger typ2" id="deleteAccount" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
         <button type="button" class="btn btn-outline-warning typ2" id="logotAccount">LogOut</button>
 
         <button type="button" class="btn btn-outline-primary typ1" id="singupAccount">SingUp</button>
         <button type="button" class="btn btn-outline-info typ1" id="loginAccount">LogIn</button>
     </div>
     <div class="profile">
+
         <div class="avatar">
-            {% if sName %}
-                {{ sName[0]|upper }}
+            {% if user and user.sName %}
+                {{ user.sName[0]|upper }}
             {% else %}
                 G
             {% endif %}
         </div>
+
         <div>
-            <strong>{{ sName|default("Guest", true) }}</strong>
-            <small>{{ Email|default("Guest", true) }}</small>
+            <strong>
+                {% if user and user.sName %}
+                    {{ user.sName }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </strong>
+
+            <small>
+                {% if user and user.email %}
+                    {{ user.email }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </small>
         </div>
+
     </div>
+
 {% endblock rightSideBlock %}
 {% block body %}
 
@@ -127,8 +144,24 @@
                         </div>
 
                         <div class="task-actions">
-                            <button>Edit</button>
-                            <button class="delete">Delete</button>
+                            <button
+                                type="button"
+                                class="btn btn-outline-info todoEditBtn"
+                                id='todoEditBtn'
+                                data-todo-id="{{ task.id }}"
+                                data-title="{{ task.title }}"
+                                data-bs-toggle='modal'
+                                data-bs-target='#exampleModal'
+                                data-description="{{ task.description or '' }}">
+                                Edit
+                            </button>
+                            <button
+                                type="button"
+                                class="todoDeleteBtn btn btn-outline-danger"
+                                id='todoDeleteBtn'
+                                data-todo-id="{{ task.id }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Delete
+                            </button>
                         </div>
 
                     </article>
@@ -152,107 +185,24 @@
 
     </main>
     <!-- Delete Account Popup -->
+    <!-- Modal -->
 
-    <div
-        class="modal-overlay"
-        id="deleteModal"
-        aria-hidden="true"
-    >
-
-        <div
-            class="delete-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="deleteModalTitle"
-        >
-
-            <button
-                class="modal-close"
-                id="closeDeleteModal"
-                type="button"
-                aria-label="Close"
-            >
-                ×
-            </button>
-
-
-            <div class="delete-icon">
-                ⚠
-            </div>
-
-
-            <p class="section-label">
-                DANGER ZONE
-            </p>
-
-
-            <h2 id="deleteModalTitle">
-                Delete your account?
-            </h2>
-
-
-            <p>
-                This action cannot be undone.
-                Your account and associated data will be permanently deleted.
-            </p>
-
-
-            <div class="modal-actions">
-
-                <button
-                    class="cancel-btn"
-                    id="cancelDelete"
-                    type="button"
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    class="confirm-delete-btn"
-                    id="confirmDelete"
-                    type="button"
-                >
-                    Yes, Delete Account
-                </button>
-
-            </div>
-
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confermetion</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
+        <div class="modal-body">
+            <p>Are you shore you want to <strong>delete</strong>!</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id='cancelBtn'>Close</button>
+            <button type="button" class="btn btn-danger" id="confirmBtn">Yes Delete</button>
+        </div>
+        </div>
     </div>
-
-    <div class="delete-modal" id="deleteModal">
-
-        <div class="delete-modal-content">
-
-            <button class="delete-modal-close" id="closeDeleteModal">
-                ×
-            </button>
-
-            <div class="delete-warning-icon">
-                ⚠
-            </div>
-
-            <h2>Delete Account?</h2>
-
-            <p>
-                Are you sure you want to delete your account?
-                This action cannot be undone and all your data will be permanently removed.
-            </p>
-
-            <div class="delete-modal-actions">
-                <button class="cancel-btn" id="cancelDelete">
-                    Cancel
-                </button>
-
-                <button class="confirm-delete-btn" id="confirmDelete">
-                    Yes, Delete Account
-                </button>
-            </div>
-
-        </div>
-
     </div>
 
     <!-- Modal -->

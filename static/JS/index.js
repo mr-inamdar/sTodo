@@ -1,50 +1,145 @@
-import { deleteAccaount, insertToso, logOutAccount } from "./api.js"
+import { deleteAccaount, deleteTodo, getAllTodos, insertToso, logOutAccount, syncSession, updateTodo } from "./api.js"
 
-const submitForm = document.getElementById('submitForm')
-const deleteAccount = document.getElementById('deleteAccount')
-const logotAccount = document.getElementById('logotAccount')
-const singupAccount = document.getElementById('singupAccount')
-const loginAccount = document.getElementById('loginAccount')
-const title = document.getElementById('title')
-const desc = document.getElementById('desc')
-const addBtns = document.querySelectorAll('addBtns')
+const submitForm = document.getElementById('submitForm');
+const deleteAccountBtn = document.getElementById('deleteAccount');
+const logotAccount = document.getElementById('logotAccount');
+const singupAccount = document.getElementById('singupAccount');
+const loginAccount = document.getElementById('loginAccount');
+const addBtns = document.querySelectorAll('.addBtns');
+const todoEditBtn = document.querySelectorAll('.todoEditBtn');
+const todoDeleteBtn = document.querySelectorAll('.todoDeleteBtn');
+const typ1 = document.querySelectorAll('.typ1');
+const typ2 = document.querySelectorAll('.typ2');
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    await syncSession();
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    console.log("USER:", user);
+
+    if (user) {
+        await getAllTodos(user.id);
+    }
+
+    if (user && addBtns.length > 0) {
+
+        addBtns.forEach((btn) => {
+            btn.setAttribute('data-bs-toggle', 'modal');
+            btn.setAttribute('data-bs-target', '#exampleModal');
+        });
+
+    }
+    if (user && typ1.length > 0 && typ2.length > 0) {
+        typ1.forEach((btn)=>{
+            btn.style.display = 'none';
+        });
+        typ2.forEach((btn)=>{
+            btn.style.display = 'initial';
+        })
+    }
+});
+function openAddModal() {
+    document.getElementById("exampleModalLabel").innerText = "Add Todo";
+
+    document.getElementById("title").value = "";
+    document.getElementById("desc").value = "";
+
+    document.getElementById("submitForm").innerText = "Save";
+
+    document.getElementById("submitForm").dataset.mode = "add";
+}
+if (addBtns.length > 0) {
+    addBtns.forEach((btn) => {
+        btn.addEventListener('click', openAddModal)
+    })
+}
+function openUpdateModal(todoId, title, description) {
+
+    document.getElementById("exampleModalLabel").innerText = "Update Todo";
+
+    document.getElementById("title").value = title;
+    document.getElementById("desc").value = description;
+
+    document.getElementById("submitForm").innerText = "Update";
+
+    document.getElementById("submitForm").dataset.mode = "update";
+    document.getElementById("submitForm").dataset.todoId = todoId;
+}
 
 if (submitForm){
     submitForm.addEventListener('click', async (e)=>{
         e.preventDefault();
+
+        const title = document.getElementById('title');
+        const desc = document.getElementById('desc');
         
         const data = {
-            title: title.value(),
-            desc: desc.value()
+            title: title?.value,
+            desc: desc?.value
         }
+        const user = JSON.parse(localStorage.getItem('user'))
 
-        let userId;
+        if (submitForm.dataset.mode == 'add') {
 
-        if (localStorage.getItem('user')) {
-            userId = localStorage.getItem('user').id || null;
+            if (user) {
+
+                const res = await insertToso(data, user.id);
+                
+
+                if(res.success){
+                    alert(res.message)
+                }
+                else{
+                    if (res.status === 401) {
+                        localStorage.removeItem("user");
+                        window.location.href = "/login";
+                        return;
+                    }
+                    alert(res.message)
+                }
+            }
         }
+        else if (submitForm.dataset.mode == "update") {
 
-        const res = await insertToso(data, userId)
+            if (user) {
 
-        if(res.success){
-            alert(res.message)
+                const todoId = Number(submitForm.dataset.todoId);
+
+                const res = await updateTodo(data, user.id, todoId)
+
+                if(res.success){
+                    alert(res.message)
+                }
+                else{
+                    if (res.status === 401) {
+                        localStorage.removeItem("user");
+                        window.location.href = "/login";
+                        return;
+                    }
+                    alert(res.message)
+                }
+            }
         }
-        else{
-            alert(res.message)
-        }
-
         document.getElementById('closeForm').click();
     })
 }
 
-if (deleteAccount){
-    deleteAccount.addEventListener('click', async (e)=>{
+if (deleteAccountBtn){
+    deleteAccountBtn.addEventListener('click', async (e)=>{
         e.preventDefault();
 
-        if (localStorage.getItem('user')) {
-            const res = await deleteAccaount();
-        
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (user) {
+            confirmBtn.dataset.mode = 'account';
+            confirmBtn.dataset.id = user.id;
         }
+        // if (localStorage.getItem('user')) {
+        //     const res = await deleteAccaount();
+        
+        // }
     })
 }
 
@@ -53,7 +148,19 @@ if (logotAccount){
         e.preventDefault();
         
         if (localStorage.getItem('user')) {
-            const res = await logOutAccount()
+            const res = await logOutAccount();
+
+            if(res.success){
+                alert(res.message)
+            }
+            else{
+                if (res.status === 401) {
+                    localStorage.removeItem("user");
+                    window.location.href = "/login";
+                    return;
+                }
+                alert(res.message)
+            }
         }
 
     })
@@ -76,156 +183,88 @@ if (loginAccount){
     })
 }
 
-if (addBtns.length > 0){
-    for(let i = 0; i < 2; i++){           
-        if(localStorage.getItem('user')){
-            addBtns[i].setAttribute('data-bs-toggle', 'modal');
-            addBtns[i].setAttribute('data-bs-target', '#exampleModal')
-        }
-    }
+if (todoEditBtn.length > 0){
+    todoEditBtn.forEach((btn)=>{
+        btn.addEventListener('click', async (e)=>{
+            e.preventDefault();
+
+            const todoId = btn.dataset.todoId;
+            const title = btn.dataset.title;
+            const description = btn.dataset.description;
+
+            openUpdateModal(todoId, title, description);
+        })
+    })
+}
+if (todoDeleteBtn.length > 0){
+
+    todoDeleteBtn.forEach((button) => {
+
+        button.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            const todoId = Number(button.dataset.todoId);
+
+            console.log("Todo ID:", todoId);
+
+            const uId = JSON.parse(localStorage.getItem('user')).id;
+
+            confirmBtn.dataset.todoId = todoId;
+            confirmBtn.dataset.uId = uId;
+            confirmBtn.dataset.mode = 'todo';
+        });
+    });
 }
 
+const confirmBtn = document.getElementById('confirmBtn');
+const cancelBtn = document.getElementById('cancelBtn');
 
-const deleteModal = document.getElementById("deleteModal");
+if (confirmBtn) {
+    confirmBtn.addEventListener('click', async () => {
 
-const deleteBtn = document.getElementById("deleteAccountBtn");
+        if (confirmBtn.dataset.mode == 'account') {
 
-const closeDeleteModal = document.getElementById("closeDeleteModal");
+            const id = confirmBtn.dataset.id;
+            
+            const res = await deleteAccaount(id);
 
-const cancelDelete = document.getElementById("cancelDelete");
-
-const confirmDelete = document.getElementById("confirmDelete");
-
-
-
-function openDeleteModal() {
-
-    deleteModal.classList.add("show");
-
-    deleteModal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-}
-
-
-function closeModal() {
-
-    deleteModal.classList.remove("show");
-
-    deleteModal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-}
-
-
-deleteBtn?.addEventListener(
-    "click",
-    openDeleteModal
-);
-
-
-closeDeleteModal?.addEventListener(
-    "click",
-    closeModal
-);
-
-
-cancelDelete?.addEventListener(
-    "click",
-    closeModal
-);
-
-
-deleteModal?.addEventListener(
-    "click",
-    function(event) {
-
-        if (event.target === deleteModal) {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Escape") {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-confirmDelete?.addEventListener(
-    "click",
-    async function() {
-
-        confirmDelete.disabled = true;
-
-        confirmDelete.textContent =
-            "Deleting...";
-
-
-        try {
-
-            const response =
-                await fetch(
-                    "/auth/deleteAccount",
-                    {
-                        method: "DELETE"
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (
-                response.ok &&
-                data.success !== false
-            ) {
-
-                window.location.href =
-                    data.redirect ||
-                    "/auth/login";
-
-                return;
+            if(res.success){
+                cancelBtn.click();
+                alert(res.message)
 
             }
-
-
-            alert(
-                data.message ||
-                "Unable to delete account."
-            );
-
-
-        } catch (error) {
-
-            alert(
-                "Server error. Please try again."
-            );
+            else{
+                if (res.status === 401) {
+                    localStorage.removeItem("user");
+                    window.location.href = "/login";
+                    return;
+                }
+                alert(res.message)
+            }
 
         }
+        else if (confirmBtn.dataset.mode == 'todo') {
+            const todoId = confirmBtn.dataset.todoId;
+            const uId = confirmBtn.dataset.uId;
 
+            const res = await deleteTodo(uId, todoId);
 
-        confirmDelete.disabled = false;
+            if(res.success){
+                cancelBtn.click();
+                alert(res.message)
+                
+            }
+            else{
+                if (res.status === 401) {
+                    localStorage.removeItem("user");
+                    window.location.href = "/login";
+                    return;
+                }
+                alert(res.message)
+            }
+        }
+    })
+}
 
-        confirmDelete.textContent =
-            "Yes, Delete Account";
-
-    }
-);
+// localStorage.clear()

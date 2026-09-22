@@ -5,7 +5,7 @@ def find_by_email(email):
     try:
         db = get_sql_connection()
         cursor = db.cursor(dictionary=True)
-        query = 'SELECT sName, sId, email FROM student WHERE email = %s'
+        query = 'SELECT sName, sId, email, password FROM student WHERE email = %s'
 
         cursor.execute(query, (email,))
         user=cursor.fetchone()
